@@ -1,4 +1,4 @@
-name: Build Next.js with Secrets
+name: Build Next.js App
 
 on: [push, pull_request]
 
@@ -12,14 +12,11 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'  # 需与原项目一致
+          node-version: '20'
 
-      # 关键步骤：动态生成 .env 文件
       - name: Create .env file
         run: |
           echo "NEXT_PUBLIC_PROJECT_API=${{ secrets.PROJECT_API_URL }}" > .env
-          # 如果需要其他变量，继续追加（示例）：
-          # echo "ANOTHER_VAR=value" >> .env
 
       - name: Install dependencies
         run: npm install
@@ -27,9 +24,8 @@ jobs:
       - name: Build project
         run: npm run build
 
-      # 可选：上传构建产物供下载
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # 关键修复
         with:
           name: nextjs-build
-          path: .next/  # Next.js 默认输出目录
+          path: .next/
